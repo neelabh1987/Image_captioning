@@ -19,8 +19,8 @@ import torch
 
 # Load model from Hugging Face Hub
 model_name = "kneelabh87/blip-finetuned-construction_updated"
-model = BlipForConditionalGeneration.from_pretrained(model_name)
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = BlipForConditionalGeneration.from_pretrained(model_name, force_download = True)
+tokenizer = AutoTokenizer.from_pretrained(model_name, force_download = True)
 
 st.title("BLIP Fine-tuned Image Captioning")
 
