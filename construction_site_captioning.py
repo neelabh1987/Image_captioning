@@ -13,14 +13,14 @@ Original file is located at
 # STREAMLIT CIVIL CAPTION APP
 # ==============================
 import streamlit as st
-from transformers import BlipForConditionalGeneration, AutoTokenizer
+from transformers import BlipForConditionalGeneration, BlipProcessor
 from PIL import Image
 import torch
 
 # Load model from Hugging Face Hub
 model_name = "kneelabh87/blip-finetuned-construction_updated"
 model = BlipForConditionalGeneration.from_pretrained(model_name, force_download = True)
-tokenizer = AutoTokenizer.from_pretrained(model_name, force_download = True)
+tokenizer = BlipProcessor.from_pretrained(model_name, force_download = True)
 
 st.title("BLIP Fine-tuned Image Captioning")
 
@@ -30,11 +30,11 @@ if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Image", use_container_width=True)
 
-    inputs = tokenizer(images=image, return_tensors="pt")
+    inputs = processor(images=image, return_tensors="pt")
     with torch.no_grad():
         output = model.generate(**inputs, max_new_tokens=30)
 
-    caption = tokenizer.decode(output[0], skip_special_tokens=True)
+    caption = processor.decode(output[0], skip_special_tokens=True)
     st.subheader("Generated Caption")
     st.write(caption)
 
