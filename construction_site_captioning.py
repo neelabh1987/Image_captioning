@@ -13,30 +13,37 @@ Original file is located at
 # STREAMLIT CIVIL CAPTION APP
 # ==============================
 import streamlit as st
-from transformers import BlipForConditionalGeneration, BlipProcessor
+from transformers import BlipProcessor, BlipForConditionalGeneration
 from PIL import Image
 import torch
 
-# Load model from Hugging Face Hub
+# Load model + processor from Hugging Face Hub
 model_name = "kneelabh87/blip-finetuned-construction_updated"
-model = BlipForConditionalGeneration.from_pretrained(model_name, force_download = True)
-tokenizer = BlipProcessor.from_pretrained(model_name, force_download = True)
+
+processor = BlipProcessor.from_pretrained(model_name)
+model = BlipForConditionalGeneration.from_pretrained(model_name)
 
 st.title("BLIP Fine-tuned Image Captioning")
 
-uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Upload an image", type=["jpg","jpeg","png"])
 
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Image", use_container_width=True)
 
+    # Preprocess with processor (handles both tokenizer + feature extractor)
     inputs = processor(images=image, return_tensors="pt")
-    with torch.no_grad():
-        output = model.generate(**inputs, max_new_tokens=30)
 
-    caption = processor.decode(output[0], skip_special_tokens=True)
+    # Generate caption
+    with torch.no_grad():
+        output_ids = model.generate(**inputs, max_new_tokens=30)
+
+    # Decode output
+    caption = processor.decode(output_ids[0], skip_special_tokens=True)
+
     st.subheader("Generated Caption")
     st.write(caption)
+
 
 
 
