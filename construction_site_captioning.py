@@ -40,21 +40,25 @@ if uploaded_file:
 
     # Generate caption
     with torch.no_grad():
+    # Tokenize without truncation
+    inputs = processor(images=image, return_tensors="pt", padding="max_length", truncation=False).to(device)
+
     output_ids = model.generate(
         **inputs,
-        max_length=200,
+        min_length=50,
+        max_length=250,
         num_beams=5,
         repetition_penalty=1.2,
-        early_stopping=False,     # prevent stopping too early
-        no_repeat_ngram_size=3    # avoid loops
+        early_stopping=False,
+        eos_token_id=None  # 🚀 ignore EOS, don't stop early
     )
-
 
     caption = processor.batch_decode(
     output_ids,
     skip_special_tokens=True,
     clean_up_tokenization_spaces=True
-    )[0]   
+    )[0]
+   
 
 
     st.subheader("Generated Caption")
