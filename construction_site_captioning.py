@@ -42,14 +42,15 @@ if uploaded_file:
     with torch.no_grad():
     output_ids = model.generate(
         **inputs,
-        min_length=50,
         max_length=200,
         num_beams=5,
         repetition_penalty=1.2,
-        early_stopping=False
+        early_stopping=False,     # prevent stopping too early
+        no_repeat_ngram_size=3    # avoid loops
     )
 
-     caption = processor.batch_decode(
+
+    caption = processor.batch_decode(
     output_ids,
     skip_special_tokens=True,
     clean_up_tokenization_spaces=True
