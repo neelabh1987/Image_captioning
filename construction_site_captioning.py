@@ -32,7 +32,7 @@ if uploaded_file:
     st.image(image, caption="Uploaded Image", use_container_width=True)
 
     # Preprocess with processor (handles both tokenizer + feature extractor)
-    inputs = processor(images=image, return_tensors="pt")
+    inputs = processor(images=image, return_tensors="pt").to(device)
     pixel_values = inputs.pixel_values
     # Generate caption
     with torch.no_grad():
