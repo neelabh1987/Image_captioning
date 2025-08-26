@@ -53,11 +53,11 @@ if uploaded_file:
         eos_token_id=None  # 🚀 ignore EOS, don't stop early
     )
 
-    caption = processor.batch_decode(
-    output_ids,
-    skip_special_tokens=True,
-    clean_up_tokenization_spaces=True
-    )[0]
+    caption = processor.batch_decode(output_ids, skip_special_tokens=True)[0]
+    # Cut at last complete sentence
+    if "." in caption:
+        caption = caption[:caption.rfind(".")+1]
+
    
 
 
