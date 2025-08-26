@@ -33,13 +33,13 @@ if uploaded_file:
 
     # Preprocess with processor (handles both tokenizer + feature extractor)
     inputs = processor(images=image, return_tensors="pt")
-
+    pixel_values = inputs.pixel_values
     # Generate caption
     with torch.no_grad():
-        output_ids = model.generate(**inputs, max_new_tokens=500)
+        output_ids = model.generate(pixel_values=pixel_values, max_length=1000)
 
     # Decode output
-    caption = processor.decode(output_ids[0], skip_special_tokens=False)
+    caption = processor.batch_decode(generated_ids, skip_special_tokens=True)[0])
 
     st.subheader("Generated Caption")
     st.write(caption)
