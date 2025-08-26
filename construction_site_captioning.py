@@ -36,7 +36,7 @@ if uploaded_file:
 
     # Generate caption
     with torch.no_grad():
-        output_ids = model.generate(**inputs, max_new_tokens=30)
+        output_ids = model.generate(**inputs, max_new_tokens=300)
 
     # Decode output
     caption = processor.decode(output_ids[0], skip_special_tokens=True)
