@@ -36,10 +36,10 @@ if uploaded_file:
 
     # Generate caption
     with torch.no_grad():
-        output_ids = model.generate(**inputs, max_new_tokens=300)
+        output_ids = model.generate(**inputs, max_new_tokens=500)
 
     # Decode output
-    caption = processor.decode(output_ids[0], skip_special_tokens=True)
+    caption = processor.decode(output_ids[0], skip_special_tokens=False)
 
     st.subheader("Generated Caption")
     st.write(caption)
