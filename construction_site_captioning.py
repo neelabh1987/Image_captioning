@@ -40,13 +40,21 @@ if uploaded_file:
 
     # Generate caption
     with torch.no_grad():
-        output_ids = model.generate(**inputs, 
-                                    max_length=200,   # keep reasonable
-                                    num_beams=5,      # beam search improves quality
-                                    repetition_penalty=1.2)
+    output_ids = model.generate(
+        **inputs,
+        min_length=50,
+        max_length=200,
+        num_beams=5,
+        repetition_penalty=1.2,
+        early_stopping=False
+    )
 
-    # Decode output
-    caption = processor.batch_decode(output_ids, skip_special_tokens=True)[0]
+     caption = processor.batch_decode(
+    output_ids,
+    skip_special_tokens=True,
+    clean_up_tokenization_spaces=True
+    )[0]   
+
 
     st.subheader("Generated Caption")
     st.write(caption)
