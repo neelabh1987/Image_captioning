@@ -12,6 +12,7 @@ Original file is located at
 # ==============================
 # STREAMLIT CIVIL CAPTION APP
 # ==============================
+# -*- coding: utf-8 -*-
 import streamlit as st
 from transformers import BlipProcessor, BlipForConditionalGeneration
 from PIL import Image
@@ -23,26 +24,33 @@ model_name = "kneelabh87/blip-finetuned-construction_site_caption"
 processor = BlipProcessor.from_pretrained(model_name)
 model = BlipForConditionalGeneration.from_pretrained(model_name)
 
-st.title("BLIP Fine-tuned Image Captioning")
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model.to(device)
 
-uploaded_file = st.file_uploader("Upload an image", type=["jpg","jpeg","png"])
+st.title("Civil Construction Site Image Captioning")
+
+uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Image", use_container_width=True)
 
-    # Preprocess with processor (handles both tokenizer + feature extractor)
+    # Preprocess with processor
     inputs = processor(images=image, return_tensors="pt").to(device)
-    pixel_values = inputs.pixel_values
+
     # Generate caption
     with torch.no_grad():
-        output_ids = model.generate(pixel_values=pixel_values, max_length=1000)
+        output_ids = model.generate(**inputs, 
+                                    max_length=200,   # keep reasonable
+                                    num_beams=5,      # beam search improves quality
+                                    repetition_penalty=1.2)
 
     # Decode output
-    caption = processor.batch_decode(generated_ids, skip_special_tokens=True)[0])
+    caption = processor.batch_decode(output_ids, skip_special_tokens=True)[0]
 
     st.subheader("Generated Caption")
     st.write(caption)
+
 
 
 
