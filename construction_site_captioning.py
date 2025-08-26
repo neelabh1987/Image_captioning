@@ -18,7 +18,7 @@ from PIL import Image
 import torch
 
 # Load model + processor from Hugging Face Hub
-model_name = "kneelabh87/blip-finetuned-construction_updated"
+model_name = "kneelabh87/blip-finetuned-construction_site_caption"
 
 processor = BlipProcessor.from_pretrained(model_name)
 model = BlipForConditionalGeneration.from_pretrained(model_name)
