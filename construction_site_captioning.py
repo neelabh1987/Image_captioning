@@ -47,7 +47,7 @@ if uploaded_file:
         num_beams=5,
         repetition_penalty=1.2,
         early_stopping=False,
-        pad_token_id=processor.tokenizer.pad_token_id
+        #pad_token_id=processor.tokenizer.pad_token_id
         )
 
 
