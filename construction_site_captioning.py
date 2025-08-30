@@ -60,7 +60,7 @@ if uploaded_file:
    
 
 
-    st.subheader("Generated Caption")
+    st.subheader("Generated Details")
     st.write(caption)
 
 
