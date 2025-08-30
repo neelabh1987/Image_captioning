@@ -43,7 +43,7 @@ if uploaded_file:
         output_ids = model.generate(
         **inputs,
         min_length=50,
-        max_length=1000,
+        max_length=2000,
         num_beams=5,
         repetition_penalty=1.2,
         early_stopping=False,
