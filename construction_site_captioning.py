@@ -41,15 +41,15 @@ if uploaded_file:
     # Generate caption
     with torch.no_grad():
         output_ids = model.generate(
-            **inputs,
-            min_length=50,
-            max_length=250,
-            num_beams=5,
-            repetition_penalty=1.2,
-            early_stopping=False,
-            eos_token_id=None,   # <---- ignores learned EOS
-            pad_token_id=processor.tokenizer.pad_token_id
+        **inputs,
+        min_length=50,
+        max_length=1000,
+        num_beams=5,
+        repetition_penalty=1.2,
+        early_stopping=False,
+        pad_token_id=processor.tokenizer.pad_token_id
         )
+
 
 
     caption = processor.batch_decode(output_ids, skip_special_tokens=True)[0]
